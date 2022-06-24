@@ -50,7 +50,6 @@ $(document).ready(function () {
         token = $('#csrf').val();
     $(document).on("click", "#update_data", function (e) {
         e.preventDefault();
-        console.log(idUser);
         $.ajax({
             url: url + '/userData/' + idUser,
             type: "PATCH",
@@ -63,15 +62,20 @@ $(document).ready(function () {
                 password: $('#password').val(),
             },
             success: function (dataResult) {
-                dataResult = JSON.parse(dataResult);
-                if (dataResult.statusCode) {
-                    // window.location = "/userData";
+                if (dataResult.code) {
                     alert('actualizado');
                     $('#password').text('');
                 } else {
-                    alert("Internal Server Error");
+                    console.log('');
                 }
-
+                $('#nameError').text('');
+                $('#emailError').text('');
+                $('#passError').text('');
+            },
+            error: function (response) {
+                $('#nameError').text(response.responseJSON.errors.name);
+                $('#emailError').text(response.responseJSON.errors.email);
+                $('#passError').text(response.responseJSON.errors.password);
             }
         });
     });

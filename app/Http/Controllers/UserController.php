@@ -108,11 +108,11 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
 
-        // $validated = $request->validate([
-        //     'name' => 'required|string',
-        //     'email' => 'required|email',
-        //     'password' => 'required',
-        // ]);
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
         $userData = User::find($id);
         $userData->name = request('name');
@@ -120,7 +120,11 @@ class UserController extends Controller
         $userData->password = request('password');
         $userData->save();
         
-        return json_encode(array('statusCode'=>200));
+
+
+        return response()->json(
+            ['code' => 200,]
+        );
     }
 
     /**
