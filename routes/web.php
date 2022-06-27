@@ -23,4 +23,5 @@ Route::get('/', function () {
 
 // Route::resource('/userData','UserController');
 Route::resource('/userData', UserController::class);
-Route::POST('/userData/getUserData',[UserController::class, 'getUserData']);
+Route::post('/userData/getUserData',[UserController::class, 'getUserData']);
+Route::post('/saveUser',[UserController::class, 'saveUser'])->name('save-user');
