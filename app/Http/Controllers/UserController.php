@@ -16,7 +16,19 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('users.index');
+        $users = User::orderBy('id', 'desc')->get();
+        return view('users.index', compact('users'));
+    }
+
+    public function saveUser(Request $request)
+    {
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->save();
+        
+        return response()->json($user);
     }
 
     public function getUserData()
