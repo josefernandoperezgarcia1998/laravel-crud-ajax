@@ -25,8 +25,8 @@ Route::get('/', function () {
 Route::resource('/userData', UserController::class);
 Route::post('/userData/getUserData',[UserController::class, 'getUserData']);
 Route::post('/saveUser',[UserController::class, 'saveUser'])->name('save-user');
-
 Route::put('/userUpdate', [UserController::class, 'userUpdate'])->name('user-update');
+Route::delete('/userDelete/{id}', [UserController::class, 'userDelete'])->name('user-delete');
 
 Route::view('/select2', 'users.select2');   
 Route::get('/select2-autocomplete-ajax', [UserController::class, 'dataAjax'])->name('select2-ajax');

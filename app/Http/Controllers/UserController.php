@@ -121,6 +121,15 @@ class UserController extends Controller
         return response()->json($user);
     }
 
+    public function userDelete($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+        return response()->json([
+            'success' => 'Usuario eliminado con éxito',
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
