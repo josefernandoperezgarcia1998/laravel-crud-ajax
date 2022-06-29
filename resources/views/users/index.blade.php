@@ -13,6 +13,7 @@
 
 <body>
     <div class="container">
+        <div id="alerta" class="alert alert-success" role="alert" style="display: none;"></div>
         <!-- Button trigger modal -->
         <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#userModal">
             Nuevo usuario
@@ -138,12 +139,16 @@
                 },
                 success: function (response) {
                     if (response) {
-                        $('#tableUser tbody').prepend('<tr><td>' + response.id + '</td><td>' +
-                            response.name + '</td><td>' + response.email +
+                        $('#tableUser tbody').prepend('<tr><td>' + response.user.id + '</td><td>' +
+                            response.user.name + '</td><td>' + response.user.email +
                             '</td><td><a href="javascript:void(0)" class="btn btn-warning btn-sm" onclick="editUser(' +
-                            response.id + ')">Editar</a></td></tr>');
+                            response.user.id + ')">Editar</a> <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="deleteUser(' +
+                            response.user.id + ')">Eliminar</a></td></tr>');
                         $('#userForm')[0].reset();
                         $('#userModal').modal('hide');
+                        $('#alerta').css('display', 'block');
+                        $('#alerta').text(response.success);
+                        $('#alerta').fadeOut(10000);
                     }
                 }
             });
@@ -160,7 +165,6 @@
                 $('#emailEdit').val(user.email);
                 $('#passwordEdit').val(user.password);
                 $('#userEditModal').modal('toggle');
-                console.log(user);
             });
         }
 
@@ -184,11 +188,13 @@
                     _token: _token,
                 },
                 success: function (response) {
-                    $('#userid' + response.id + ' td:nth-child(2)').text(response.name);
-                    $('#userid' + response.id + ' td:nth-child(3)').text(response.email);
+                    $('#userid' + response.user.id + ' td:nth-child(2)').text(response.user.name);
+                    $('#userid' + response.user.id + ' td:nth-child(3)').text(response.user.email);
                     $('#userEditModal').modal('toggle');
                     $('#userEditForm')[0].reset();
-                    console.log(response);
+                    $('#alerta').css('display', 'block');
+                    $('#alerta').text(response.success);
+                    $('#alerta').fadeOut(10000);
                 }
             });
         });
@@ -210,8 +216,10 @@
                     },
                     success: function(response)
                     {
-                        console.log(response.success);
                         $('#userid'+id).remove();
+                        $('#alerta').css('display', 'block');
+                        $('#alerta').text(response.success);
+                        $('#alerta').fadeOut(10000);
                     } 
                 });
             }

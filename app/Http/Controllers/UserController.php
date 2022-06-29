@@ -26,7 +26,10 @@ class UserController extends Controller
         $user->password = $request->password;
         $user->save();
         
-        return response()->json($user);
+        return response()->json([
+            'user' => $user,
+            'success' => 'Usuario creado con éxito',
+        ]);
     }
 
     // Edit - Retrieve the user data by id
@@ -45,7 +48,10 @@ class UserController extends Controller
         $user->password = $request->password;
         $user->save();
         
-        return response()->json($user);
+        return response()->json([
+            'user' => $user,
+            'success' => 'Usuario actualizado con éxito',
+        ]);
     }
 
     public function userDelete($id)
