@@ -106,8 +106,19 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $userData = User::find($id);
-        return view('users.edit',compact('userData','id'));
+        $user = User::find($id);
+        return response()->json($user);
+    }
+
+    public function userUpdate(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->save();
+        
+        return response()->json($user);
     }
 
     /**
@@ -117,26 +128,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
 
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        $userData = User::find($id);
-        $userData->name = request('name');
-        $userData->email = request('email');
-        $userData->password = request('password');
-        $userData->save();
-        
-
-
-        return response()->json(
-            ['code' => 200,]
-        );
     }
 
     /**
@@ -150,5 +144,18 @@ class UserController extends Controller
         User::find($id)->delete();
         
         return json_encode(array('statusCode'=>200));
+    }
+
+    public function dataAjax(Request $request)
+    {
+        $data = User::get();
+
+        if($request->has('q')){
+            $search = $request->q;
+            $data = User::select("id","name")
+                        ->where('name','LIKE',"%$search%")
+                        ->get();
+        }
+        return response()->json($data);
     }
 }
