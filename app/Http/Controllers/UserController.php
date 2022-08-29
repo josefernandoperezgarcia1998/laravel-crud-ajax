@@ -20,9 +20,30 @@ class UserController extends Controller
     // Store
     public function saveUser(Request $request)
     {
+
+        $validator = validator($request->all(), [
+            'img' => 'mimes:jpeg,png,gif|max:3000',
+        ]);
+        
+        if($validator->fails())
+        {
+            return response()->json([
+                'error' => 'Error en validación de imagen'
+            ]);
+        }
+        
+        $img = NULL;
+        
+        if($request->hasFile('image')){
+            $imagen = $request->file('image');
+            $nombre_de_imagen = $imagen->getClientOriginalName();
+            $img = $request->file('image')->storeAs('uploads/user-images/image', $nombre_de_imagen, 'public');
+        }
+        
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->image = $img;
         $user->password = $request->password;
         $user->save();
         

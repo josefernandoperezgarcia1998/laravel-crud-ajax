@@ -23,6 +23,7 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Nombre</th>
+                    <th scope="col">Imagen</th>
                     <th scope="col">Correo</th>
                     <th scope="col">Actions</th>
                 </tr>
@@ -32,6 +33,9 @@
                 <tr id="userid{{$user->id}}">
                     <td>{{$user->id}}</td>
                     <td>{{$user->name}}</td>
+                    <td>
+                        <img src="{{asset('storage').'/'.$user->image}}" alt="image" class="img-fluid rounded mx-auto d-block">
+                    </td>
                     <td>{{$user->email}}</td>
                     <td>
                         <a href="javascript:void(0)" class="btn btn-warning btn-sm"
@@ -53,7 +57,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="userForm">
+                    <form id="userForm" enctype="multipart/form-data">
                         @csrf
                         {{-- <input type="hidden" name="_token" id="csrf" value="{{Session::token()}}"> --}}
                         <div class="mb-3">
@@ -66,6 +70,10 @@
                             <input type="email" class="form-control" id="email" name="email"
                                 aria-describedby="emailHelp">
                             <small class="text-danger" id="emailError"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Correo</label>
+                            <input class="form-control" type="file" name="image" id="image">
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputPassword1" class="form-label">Password</label>
@@ -126,14 +134,15 @@
             let _token = $('input[name=_token]').val();
             let name = $('#name').val();
             let email = $('#email').val();
+            let image = $('#image').val();
             let password = $('#password').val();
-
             $.ajax({
                 url: "{{route('save-user')}}",
                 type: 'POST',
                 data: {
                     name: name,
                     email: email,
+                    image: image,
                     password: password,
                     _token: _token,
                 },
@@ -149,7 +158,13 @@
                         $('#alerta').css('display', 'block');
                         $('#alerta').text(response.success);
                         $('#alerta').fadeOut(10000);
+                        console.log(response);
                     }
+                },
+                contentType: false,
+                processData: false,
+                error: function(response){
+                    console.log(response.error);
                 }
             });
         });
